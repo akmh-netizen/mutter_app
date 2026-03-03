@@ -6,14 +6,28 @@
 <meta charset="UTF-8">
 <title>ログイン</title>
 
-<% 
-String logoutMsg = (String) request.getAttribute("logoutMsg"); 
-if (logoutMsg != null) { 
-%> 
-<script> alert("<%= logoutMsg %>"); 
-</script> 
-<% 
-} 
+<%
+String registerMsg = (String) session.getAttribute("registerMsg");
+if (registerMsg != null) {
+%>
+<script>
+    alert("<%=registerMsg%>");
+</script>
+<%
+session.removeAttribute("registerMsg"); // 1回だけ表示
+}
+%>
+
+
+<%
+String logoutMsg = (String) request.getAttribute("logoutMsg");
+if (logoutMsg != null) {
+%>
+<script> alert("<%=logoutMsg%>
+	");
+</script>
+<%
+}
 %>
 
 </head>
@@ -53,7 +67,7 @@ if (logoutMsg != null) {
 
 	<!-- 新規登録へのリンク -->
 	<p>
-		<a href="register">新規登録はこちら</a>
+		<a href="register">ユーザー登録</a>
 	</p>
 
 </body>

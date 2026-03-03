@@ -15,8 +15,7 @@ String welcomeMsg = (String) session.getAttribute("welcomeMsg");
 if (welcomeMsg != null) {
 %>
 <script> 
-alert("<%=welcomeMsg.replace("\n", "\\n")%>
-	");
+alert("<%=welcomeMsg.replace("\n", "\\n")%>");
 </script>
 <%
 session.removeAttribute("welcomeMsg"); // 1回だけ表示

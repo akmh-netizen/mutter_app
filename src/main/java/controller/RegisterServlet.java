@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import model.dao.LoginDAO;
 
@@ -39,7 +40,8 @@ public class RegisterServlet extends HttpServlet {
 		boolean result = dao.insertUser(userName, password);
 
 		if (result) {
-			// 登録成功 
+			// 登録成功 	
+			HttpSession session = request.getSession(); session.setAttribute("registerMsg", "ユーザー登録が完了しました");
 			// ログイン画面へリダイレクト 
 			response.sendRedirect("login");
 		} else {

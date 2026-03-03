@@ -22,6 +22,7 @@
 		<!-- パスワード入力欄 -->
 		<label>パスワード</label><br> <input type="password" name="password"
 			required>
+			<br>
 
 		<!-- 登録ボタン -->
 		<input type="submit" value="登録">
