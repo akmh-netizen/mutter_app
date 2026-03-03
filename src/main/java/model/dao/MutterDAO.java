@@ -130,13 +130,13 @@ public class MutterDAO {
 				PreparedStatement ps = conn.prepareStatement(sql.toString());) {
 
 			int index = 1;
-			
+
 			// 正規化済みの値をセット
 			if (hasUser) {
 				ps.setString(index++, "%" + userName + "%");
 			}
 			if (hasKeyword) {
-				ps.setString(index++, "%" + keyword + "%"); 
+				ps.setString(index++, "%" + keyword + "%");
 			}
 
 			//SQL文を実行し、その結果セット（行の集合）を rs として受け取る
@@ -159,6 +159,100 @@ public class MutterDAO {
 
 		return mutterList;
 
+	}
+
+	/*
+	 * ログインユーザーの投稿だけを取得するメソッド
+	 */
+	public List<Mutter> findByLoginUser(String userName) {
+		List<Mutter> list = new ArrayList<>();
+
+		try (Connection conn = DButil.getConnection()) {
+
+			//ログインユーザー本人の投稿だけを取得
+			String sql = "SELECT id, username, text FROM mutters WHERE username = ? ORDER BY id DESC";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, userName);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			// 1件ずつMutterオブジェクトに詰めてリストへ
+			while (rs.next()) {
+				Mutter m = new Mutter();
+				m.setId(rs.getInt("id"));
+				m.setUserName(rs.getString("username"));
+				m.setText(rs.getString("text"));
+				list.add(m);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+
+	/*
+	 * つぶやきの削除メソッド
+	 */
+	public boolean delete(int id, String userName) {
+		try (Connection conn = DButil.getConnection()) {
+
+			// 投稿IDと投稿者名が一致した場合のみ削除される
+			String sql = "DELETE FROM mutters WHERE id = ? AND username = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			pstmt.setString(2, userName);
+
+			// 削除件数が1なら成功
+			return pstmt.executeUpdate() == 1;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+
+		}
+	}
+
+	/*
+	 * 編集するmutterデータを取得する
+	 */
+	public Mutter findByIdAndUser(int id, String userName) {
+		try (Connection conn = DButil.getConnection()) {
+			String sql = "SELECT id, username, text FROM mutters WHERE id = ? AND username = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			pstmt.setString(2, userName);
+
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				Mutter m = new Mutter();
+				m.setId(rs.getInt("id"));
+				m.setUserName(rs.getString("username"));
+				m.setText(rs.getString("text"));
+				return m;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	// つぶやき更新メソッド
+	public boolean update(int id, String userName, String newText) {
+		try (Connection conn = DButil.getConnection()) {
+			String sql = "UPDATE mutters SET text = ? WHERE id = ? AND username = ?";
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, newText);
+			pstmt.setInt(2, id);
+			pstmt.setString(3, userName);
+
+			return pstmt.executeUpdate() == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }

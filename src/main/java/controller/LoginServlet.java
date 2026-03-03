@@ -19,12 +19,12 @@ import model.logic.LoginLogic;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 	}
-
 
 	/**
 	 * POST メソッドでログイン処理を行う 
@@ -48,18 +48,23 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", login);
 
-			// メイン画面へリダイレクト（再読み込み対策） 
+			// メッセージをセット 
+			String msg = login.getUserName() + " さん\nようこそ、つぶやきアプリへ";
+			session.setAttribute("welcomeMsg", msg);
+
+			// mutter.jsp にリダイレクト
 			response.sendRedirect("mutter");
+			return;
+
 		} else {
 			// ログイン失敗 
 			// エラーメッセージをリクエストにセット
-			
+
 			request.setAttribute("errorMsg", "ユーザー名またはパスワードが違います");
 			// login.jsp にフォワード（入力値を保持したまま戻れる） 
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 			dispatcher.forward(request, response);
-			
-			
+
 		}
 	}
 }

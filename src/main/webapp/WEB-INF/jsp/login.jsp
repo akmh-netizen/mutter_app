@@ -5,6 +5,17 @@
 <head>
 <meta charset="UTF-8">
 <title>ログイン</title>
+
+<% 
+String logoutMsg = (String) request.getAttribute("logoutMsg"); 
+if (logoutMsg != null) { 
+%> 
+<script> alert("<%= logoutMsg %>"); 
+</script> 
+<% 
+} 
+%>
+
 </head>
 <body>
 
