@@ -1,6 +1,8 @@
 # mutter_app
 
-Java（Servlet/JSP）と PostgreSQL を使用して作成した、シンプルなつぶやき投稿アプリです。  
+Java（Servlet/JSP）と PostgreSQL を使用して作成した、シンプルなつぶやき投稿アプリです。
+※ アプリの画面イメージは GitHub の Issue に掲載しています。
+
 
 ---
 
