@@ -23,8 +23,7 @@ session.removeAttribute("registerMsg"); // 1回だけ表示
 String logoutMsg = (String) request.getAttribute("logoutMsg");
 if (logoutMsg != null) {
 %>
-<script> alert("<%=logoutMsg%>
-	");
+<script> alert("<%=logoutMsg%>");
 </script>
 <%
 }

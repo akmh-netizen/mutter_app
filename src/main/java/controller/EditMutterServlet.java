@@ -13,12 +13,22 @@ import model.dao.MutterDAO;
 import model.data.Login;
 import model.data.Mutter;
 
+/**
+ * つぶやき編集を担当するコントローラ
+ *
+ * ・GET：編集画面の表示（本人の投稿のみ）
+ * ・POST：編集内容の更新
+ */
 @WebServlet("/edit")
 public class EditMutterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	/** 
+	 *  編集画面の表示（GET） 
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		// ログインチェック 
 		HttpSession session = request.getSession(false);
 		Login loginUser = (session != null) ? (Login) session.getAttribute("loginUser") : null;
@@ -31,25 +41,23 @@ public class EditMutterServlet extends HttpServlet {
 		// 投稿IDを取得 
 		int id = Integer.parseInt(request.getParameter("id"));
 
-		// 投稿内容を取得（本人チェックも含む） 
+		// 投稿内容を取得
 		MutterDAO dao = new MutterDAO();
 		Mutter mutter = dao.findByIdAndUser(id, loginUser.getUserName());
 
-		if (mutter == null) {
-			// 他人の投稿 or 存在しない投稿 
-			session.setAttribute("errorMsg", "他人の投稿は編集できません。");
-			response.sendRedirect("mutter");
-			return;
-		}
-
-		// 編集画面へ 
+		// 編集画面へ フォワード
 		request.setAttribute("mutter", mutter);
 		request.getRequestDispatcher("/WEB-INF/jsp/edit.jsp").forward(request, response);
+
 	}
 
+	/** 
+	 *  編集内容の更新（POST） 
+	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		// ログインチェック 
 		HttpSession session = request.getSession(false);
 		Login loginUser = (session != null) ? (Login) session.getAttribute("loginUser") : null;
@@ -64,16 +72,16 @@ public class EditMutterServlet extends HttpServlet {
 		// 更新内容を取得 
 		int id = Integer.parseInt(request.getParameter("id"));
 		String newText = request.getParameter("text");
-		// 本人の投稿だけ更新 
+
+		// 更新処理
 		MutterDAO dao = new MutterDAO();
 		boolean result = dao.update(id, loginUser.getUserName(), newText);
-		if (!result) {
-			session.setAttribute("errorMsg", "他人の投稿は編集できません。");
-		} else {
-			// 編集完了メッセージ
-			session.setAttribute("editMsg", "投稿を編集しました");
-		}
-		// 更新後は一覧へ 
+
+		// 編集完了メッセージ
+		session.setAttribute("editMsg", "投稿を編集しました");
+		
+		// 更新後はつぶやき一覧へリダイレクト
 		response.sendRedirect("mutter");
+		
 	}
 }

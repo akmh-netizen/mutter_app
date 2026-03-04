@@ -15,23 +15,32 @@ import model.logic.LoginLogic;
 
 /**
  * ログイン処理を担当するサーブレット
+ *
+ * ・GET：ログイン画面の表示
+ * ・POST：ログイン認証処理
+ * ・認証成功時はセッションにユーザー情報を保存し、/mutter へ遷移
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	/** 
+	 * ログイン画面の表示（GET） 
+	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// ログイン画面へフォワード
 		request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
+
 	}
 
-	/**
-	 * POST メソッドでログイン処理を行う 
+	/** 
+	 * ログイン認証処理（POST） 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// 文字コード設定 
+
 		request.setCharacterEncoding("UTF-8");
 
 		// login.jsp のフォームから値を取得 
@@ -43,28 +52,30 @@ public class LoginServlet extends HttpServlet {
 		Login login = logic.login(userName, password);
 
 		if (login != null) {
-			// ログイン成功  
+			// ログイン成功  :
 			// セッションを取得し、ログインユーザー情報を保存 
 			HttpSession session = request.getSession();
 			session.setAttribute("loginUser", login);
 
-			// メッセージをセット 
+			// ログイン成功メッセージをセット 
 			String msg = login.getUserName() + " さん\nようこそ、つぶやきアプリへ";
 			session.setAttribute("welcomeMsg", msg);
 
-			// mutter.jsp にリダイレクト
+			//ログイン後はつぶやき一覧へリダイレクト
 			response.sendRedirect("mutter");
 			return;
 
 		} else {
-			// ログイン失敗 
+			// ログイン失敗 ：
 			// エラーメッセージをリクエストにセット
-
 			request.setAttribute("errorMsg", "ユーザー名またはパスワードが違います");
-			// login.jsp にフォワード（入力値を保持したまま戻れる） 
+			
+			// ログイン画面へフォワード
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
 			dispatcher.forward(request, response);
 
 		}
+		
 	}
+	
 }

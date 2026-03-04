@@ -9,11 +9,11 @@ import model.data.Login;
 import model.util.DButil;
 
 /**
- * ログイン処理、ログインユーザー追加メソッドを定義したDAO クラス
+ * ログイン処理、ログインユーザー登録メソッドを担当するDAOクラス
  */
 public class LoginDAO {
-	
-	/*
+
+	/**
 	 * 指定したユーザー名およびパスワードのユーザーを取得するメソッド
 	 */
 	public Login findByUserName(String userName, String password) {
@@ -26,7 +26,10 @@ public class LoginDAO {
 				PreparedStatement ps = conn.prepareStatement(sql)) {
 			ps.setString(1, userName);
 			ps.setString(2, password);
+
 			ResultSet rs = ps.executeQuery();
+
+			//ログイン成功
 			if (rs.next()) {
 				Login login = new Login();
 				login.setLoginId(rs.getInt("loginid"));
@@ -34,39 +37,40 @@ public class LoginDAO {
 				login.setPassword(rs.getString("password"));
 
 				return login;
-				
 			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return null; // 見つからなかった場合 
-		
+
+		//ログイン失敗
+		return null;
+
 	}
-	
-	/*
+
+	/**
 	 * 新規ユーザーを登録するメソッド
 	 */
 	public boolean insertUser(String userName, String password) {
 
-	    String sql = "INSERT INTO login (username, password) VALUES (?, ?)";
+		String sql = "INSERT INTO login (username, password) VALUES (?, ?)";
 
-	    try (Connection conn = DButil.getConnection();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
+		try (Connection conn = DButil.getConnection();
+				PreparedStatement ps = conn.prepareStatement(sql)) {
 
-	        ps.setString(1, userName);
-	        ps.setString(2, password); 
+			ps.setString(1, userName);
+			ps.setString(2, password);
 
-	        int result = ps.executeUpdate();
-	        return result == 1;
+			int result = ps.executeUpdate();
+			return result == 1;
 
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        
-	        return false;
-	        
-	    }
-	    
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+			return false;
+
+		}
+
 	}
 
 }

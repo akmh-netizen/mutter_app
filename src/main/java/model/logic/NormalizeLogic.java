@@ -10,7 +10,7 @@ import model.data.Mutter;
  */
 public class NormalizeLogic {
 
-	/*
+	/**
 	 * 全角 → 半角変換（英数字・記号・スペース） 
 	 */
 	public String toHalfWidth(String s) {
@@ -40,7 +40,7 @@ public class NormalizeLogic {
 
 	}
 
-	/*
+	/**
 	 * 検索用の正規化を行い DAO に渡す 
 	 */
 	public List<Mutter> search(String user, String keyword) {
