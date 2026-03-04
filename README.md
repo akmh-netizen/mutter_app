@@ -50,7 +50,7 @@ Java（Servlet/JSP）とPostgreSQL を使用して作成した、シンプルな
 
 ## 🛠 使用技術
 
-- **Java 25**
+- **Java**
 - **PostgreSQL**
 - **JSP / Servlet**
 
@@ -59,7 +59,7 @@ Java（Servlet/JSP）とPostgreSQL を使用して作成した、シンプルな
 ## 💻 開発環境
 
 - **Pleiades**
-- **Apache Tomcat 11**
+- **Apache Tomcat**
   - Eclipse（Pleiades）
 
 ---
