@@ -8,42 +8,59 @@ Java（Servlet/JSP）とPostgreSQL を使用して作成した、シンプルな
 
 ## 🚀 機能一覧
 
-- **ユーザー登録**  
-  新規ユーザーを作成し、登録完了ダイアログを表示。
+### 📘 授業で実装した機能
+- **ログイン / ログアウト**
+  - セッションでログイン状態を管理
 
-- **ログイン / ログアウト**  
-  セッションでログイン状態を管理。  
-  **未ログイン時に `/mutter` へアクセスするとログイン画面へリダイレクト。**
+- **つぶやき投稿**
+  - ユーザー名を都度入力し投稿
 
-- **つぶやき投稿**  
-  ログインユーザーのみ投稿可能。  
-  投稿者名はセッションから自動取得。
+- **つぶやき一覧表示**
+  - 全ユーザーの投稿を新しい順に表示
 
-- **つぶやき一覧表示**  
-  全ユーザーの投稿を新しい順に表示。  
-  **ログインユーザー本人の投稿だけをまとめて表示（編集・削除リンク付き）。**
 
-- **つぶやき検索**  
-  - ユーザー名（部分一致）  
+### 🛠 追加・変更した機能
+
+- **ログイン / ログアウト**
+  - セッションでログイン状態を管理
+  - 未ログイン時に `/mutter` へアクセスするとログイン画面へリダイレクト
+  
+- **つぶやき検索機能**
+  - ユーザー名（部分一致）
   - つぶやき本文（部分一致）
+  - 全角・半角を正規化して検索
 
-- **つぶやき編集**  
-  ログインユーザー本人の投稿のみ編集可能。  
-  編集完了後にダイアログを表示。
+  - **つぶやき投稿**
+  - ログインユーザー名で投稿
+  - 投稿者名はセッションから自動取得
 
-- **つぶやき削除**  
-  ログインユーザー本人の投稿のみ削除可能。  
-  削除後は `/mutter` にリダイレクト。
+- **つぶやき編集機能**
+  - ログインユーザー本人の投稿のみ編集可能
+  - 編集完了後にダイアログを表示
+
+- **つぶやき削除機能**
+  - ログインユーザー本人の投稿のみ削除可能
+  - 削除後は `/mutter` にリダイレクト
+
+- **ログインユーザーの投稿一覧表示**
+  - ログインユーザー本人の投稿だけをまとめて表示
+  - 編集・削除リンクを表示
 
 ---
 
 ## 🛠 使用技術
 
 - **Java 25**
-- **Apache Tomcat 11**
 - **PostgreSQL**
 - **JSP / Servlet**
-- **JDBC（PostgreSQL ドライバ）**
+
+---
+
+## 💻 開発環境
+
+- **Pleiades**
+- **Apache Tomcat 11**
+  - Eclipse（Pleiades）
 
 ---
 
@@ -51,36 +68,37 @@ Java（Servlet/JSP）とPostgreSQL を使用して作成した、シンプルな
 
     mutter_app/
       src/
-        controller/
-          LoginServlet.java
-          LogoutServlet.java
-          MutterServlet.java
-          RegisterServlet.java
-          DeleteMutterServlet.java
-          EditMutterServlet.java
-          
+        controller/                # サーブレット
+          LoginServlet.java        # ログイン処理（認証・セッション保存）
+          LogoutServlet.java       # ログアウト処理（セッション破棄）
+          MutterServlet.java       # つぶやき一覧表示・検索・投稿処理
+          RegisterServlet.java     # 新規ユーザー登録処理
+          DeleteMutterServlet.java # つぶやき削除処理
+          EditMutterServlet.java   # つぶやき編集処理
+    
         model/
-          dao/
-            LoginDAO.java
-            MutterDAO.java
-          data/
-            Login.java
-            Mutter.java
-          logic/
-            LoginLogic.java
-            NormalizeLogic.java
-          util/
-            DButil.java
-            
+          dao/                     # DAO
+            LoginDAO.java          # ログイン認証・ユーザー登録
+            MutterDAO.java         # つぶやきの取得・検索・投稿・更新・削除
+    
+          data/                    # DTO
+            Login.java             # ログインユーザー情報（loginid, username, password）
+            Mutter.java            # つぶやき情報（id, username, text）
+    
+          logic/                   # ビジネスロジック層
+            LoginLogic.java        # ログイン認証処理
+            NormalizeLogic.java    # 検索用の文字列正規化（全角→半角など）
+    
+          util/                    # 共通処理
+            DButil.java            # DB接続管理（Connection取得）
+    
       webapp/
         WEB-INF/
-          jsp/
-            login.jsp
-            mutter.jsp
-            register.jsp
-            edit.jsp
-            
-
+          jsp/                     # 画面（View）
+            login.jsp              # ログイン画面
+            mutter.jsp             # つぶやき一覧・検索・投稿画面
+            register.jsp           # 新規ユーザー登録画面
+            edit.jsp               # 投稿編集画面
 
 ---
 
