@@ -11,7 +11,7 @@
 	<h2>ユーザー登録</h2>
 
 	<!-- RegisterServlet からのエラーメッセージを表示 -->
-	<div class="error">${errorMsg}</div>
+	<p style="color:red;">${errorMsg}</p>
 
 	<!-- 登録フォーム -->
 	<form action="register" method="post">
@@ -31,7 +31,7 @@
 
 	<!-- ログイン画面へのリンク -->
 	<p>
-		<a href="login.jsp">ログイン画面へ戻る</a>
+		<a href="login">ログイン画面へ戻る</a>
 	</p>
 
 </body>

@@ -34,13 +34,8 @@ if (logoutMsg != null) {
 
 	<h2>ログイン</h2>
 
-	<div class="form-box">
-
-		<!-- LoginServlet からのエラーメッセージを表示 -->
-		<div class="error">${errorMsg}</div>
-
-		<!-- LoginServlet からのエラーメッセージを表示 -->
-		<p style="color: red;">${errorMsg}</p>
+		<!-- LoginServlet からのエラーメッセージの色指定 -->
+		<p style="color:red;">${errorMsg}</p>
 		<!-- ログインフォーム -->
 
 		<!-- action="login" → LoginServlet の doPost に送られる -->

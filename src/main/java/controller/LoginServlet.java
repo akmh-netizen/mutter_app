@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -61,7 +60,7 @@ public class LoginServlet extends HttpServlet {
 			String msg = login.getUserName() + " さん\nようこそ、つぶやきアプリへ";
 			session.setAttribute("welcomeMsg", msg);
 
-			//ログイン後はつぶやき一覧へリダイレクト
+			//ログイン後はつぶやき一覧へリダイレクト(フォワードだと投稿一覧が出てこないため)
 			response.sendRedirect("mutter");
 			return;
 
@@ -71,8 +70,7 @@ public class LoginServlet extends HttpServlet {
 			request.setAttribute("errorMsg", "ユーザー名またはパスワードが違います");
 			
 			// ログイン画面へフォワード
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/jsp/login.jsp");
-			dispatcher.forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(request, response);
 
 		}
 		

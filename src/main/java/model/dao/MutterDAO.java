@@ -85,55 +85,18 @@ public class MutterDAO {
 	public List<Mutter> findByUserOrKeyword(String userName, String keyword) {
 		List<Mutter> mutterList = new ArrayList<Mutter>();
 
-		StringBuilder sql = new StringBuilder("SELECT id, username, text FROM mutters "
-				+ "WHERE 1=1 ");
-
-		// 条件フラグ 
-		boolean hasUser = (userName != null && !userName.isEmpty());
-		boolean hasKeyword = (keyword != null && !keyword.isEmpty());
-
-		// 全角 → 半角変換用
-		String zenkaku = "０１２３４５６７８９"
-				+ "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ"
-				+ "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ";
-		String hankaku = "0123456789"
-				+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-				+ "abcdefghijklmnopqrstuvwxyz";
-
-		// ユーザー名検索（部分一致） 
-		if (hasUser) {
-			sql.append("AND translate(username, '")
-					.append(zenkaku)
-					.append("', '")
-					.append(hankaku)
-					.append("') LIKE ? ");
-		}
-
-		// 本文検索（部分一致） 
-		if (hasKeyword) {
-			sql.append("AND translate(text, '")
-					.append(zenkaku)
-					.append("', '")
-					.append(hankaku)
-					.append("') LIKE ? ");
-		}
-
-		sql.append("ORDER BY id DESC");
+		String sql = new String("SELECT id, username, text FROM mutters "
+				+ "WHERE username LIKE ? "
+				+ "AND text LIKE ? "
+				+ "ORDER BY id DESC ");
 
 		try (
 				Connection conn = DButil.getConnection();
-				PreparedStatement ps = conn.prepareStatement(sql.toString());) {
+				PreparedStatement ps = conn.prepareStatement(sql);) {
 
-			int index = 1;
-
-			// 正規化済みの値をセット
-			if (hasUser) {
-				ps.setString(index++, "%" + userName + "%");
-			}
-
-			if (hasKeyword) {
-				ps.setString(index++, "%" + keyword + "%");
-			}
+			// パラメータをセット
+			ps.setString(1, "%" + userName + "%");
+			ps.setString(2, "%" + keyword + "%");
 
 			//SQL文を実行し、その結果セットをrsとして受け取る
 			try (ResultSet rs = ps.executeQuery()) {

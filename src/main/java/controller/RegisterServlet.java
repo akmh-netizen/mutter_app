@@ -53,7 +53,7 @@ public class RegisterServlet extends HttpServlet {
 		// 登録成功：
 		if (result) {
 
-			// セッションに登録完了メッセージを保存
+			// セッションに登録完了メッセージをセット
 			HttpSession session = request.getSession();
 			session.setAttribute("registerMsg", "ユーザー登録が完了しました");
 
